@@ -32,9 +32,9 @@
 </template>
 
 <script>
-import request from "@/helpers/request";
+import Auth from "@/apis/auth";
 
-request('/auth/login', 'POST', {username: '1', password: '123456'})
+Auth.getInfo()
     .then(data => {
       console.log(data);
     })
@@ -81,6 +81,10 @@ export default {
       this.register.isError = false
       this.register.notice = ''
       console.log(`start register..., username: ${this.register.username} , password: ${this.register.password}`)
+      Auth.register({username: this.register.username, password: this.register.password})
+          .then(data => {
+            console.log(data);
+          })
     },
     onLogin() {
       if (!/^[\w\u4e00-\u9fa5]{3,15}$/.test(this.login.username)) {
@@ -97,6 +101,12 @@ export default {
       this.login.notice = ''
 
       console.log(`start login..., username: ${this.login.username} , password: ${this.login.password}`)
+      Auth.login({
+        username: this.login.username,
+        password: this.login.password
+      }).then(data => {
+        console.log(data);
+      })
     }
   }
 }
