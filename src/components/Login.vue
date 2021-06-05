@@ -106,6 +106,7 @@ export default {
         password: this.login.password
       }).then(data => {
         console.log(data);
+        this.$router.push('/notebooks')
       })
     }
   }
