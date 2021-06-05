@@ -41,7 +41,6 @@ export default {
     })
     Notebooks.getAll()
         .then(res => {
-          console.log(res);
           this.notebooks = res.data.reverse()
         })
   },
@@ -53,7 +52,6 @@ export default {
       } else {
         Notebooks.addNoteBook({title})
             .then(res => {
-              console.log(res);
               res.data.friendlyCreatedAt = friendlyDate(res.data.createdAt)
               this.notebooks.unshift(res.data)
               alert(res.msg)

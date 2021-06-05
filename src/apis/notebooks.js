@@ -17,7 +17,6 @@ export default {
                     res.data.forEach(notebook => {
                         notebook.friendlyCreatedAt = friendlyDate(notebook.createdAt)
                     })
-                    console.log(res.data);
                     resolve(res)
                 }).catch(err => {
                 reject(err)
