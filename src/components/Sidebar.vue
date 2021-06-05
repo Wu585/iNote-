@@ -14,7 +14,13 @@
 <script>
 import Avatar from "@/components/Avatar";
 export default {
-  components: {Avatar}
+  components: {Avatar},
+  methods:{
+    onLogout(){
+      console.log('hi');
+    }
+  }
+
 }
 </script>
 
