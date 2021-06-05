@@ -4,6 +4,7 @@ import Login from "@/components/Login";
 import NotebookList from '@/components/NotebookList'
 import NoteDetail from '@/components/NoteDetail'
 import TrashDetail from '@/components/TrashDetail'
+//import Frank from '@/components/Frank'
 
 Vue.use(VueRouter)
 
