@@ -11,6 +11,14 @@ export default {
     return {
       msg: '笔记本详情页'
     }
+  },
+  methods: {
+    open() {
+      this.$message({
+        message: '提示',
+        type: 'success'
+      })
+    }
   }
 }
 </script>
