@@ -7,12 +7,13 @@
       <div class="layout">
         <h3>笔记本列表({{ notebooks.length }})</h3>
         <div class="book-list">
-          <router-link v-for="notebook in notebooks" :key="notebook.id" :to="`/note?notebookId=${notebook.id}`" class="notebook">
+          <router-link v-for="notebook in notebooks" :key="notebook.id" :to="`/note?notebookId=${notebook.id}`"
+                       class="notebook">
             <div>
               <span class="iconfont icon-notebook"></span>{{ notebook.title }} <span>{{ notebook.noteCounts }}</span>
               <span class="action" @click.prevent.stop="onEdit(notebook)">编辑</span>
               <span class="action" @click.prevent.stop="onDelete(notebook)">删除</span>
-              <span class="date">{{ notebook.friendlyCreatedAt }}</span>
+              <span class="date">{{ notebook.createdAtFriendly }}</span>
             </div>
           </router-link>
         </div>
@@ -22,29 +23,36 @@
 </template>
 <script>
 import Auth from '@/apis/auth'
-import Notebooks from '@/apis/notebooks'
-import {friendlyDate} from "@/helpers/util";
-
-window.Notebooks = Notebooks
+import {mapActions, mapGetters} from 'vuex'
 
 export default {
   data() {
-    return {
-      notebooks: []
-    }
+    return {}
   },
   created() {
+    //this.checkLogin({path: '/login'})
     Auth.getInfo().then(res => {
       if (!res.isLogin) {
         this.$router.push('/login')
       }
     })
-    Notebooks.getAll()
-        .then(res => {
-          this.notebooks = res.data.reverse()
-        })
+    // Notebooks.getAll()
+    //     .then(res => {
+    //       this.notebooks = res.data.reverse()
+    //     })
+    this.$store.dispatch('getNotebooks')
+  },
+  computed: {
+    ...mapGetters(['notebooks'])
   },
   methods: {
+    ...mapActions([
+      'getNotebooks',
+      'addNotebook',
+      "updateNotebook",
+      'deleteNotebook',
+      'checkLogin'
+    ]),
     onCreate() {
       this.$prompt('请输入笔记本标题', '创建笔记本', {
         confirmButtonText: '确定',
@@ -52,19 +60,8 @@ export default {
         inputPattern: /^.{1,30}$/,
         inputErrorMessage: '标题不能为空，且不能超过30个字符'
       }).then(({value}) => {
-        return Notebooks.addNoteBook({title: value})
-      }).then(res => {
-        res.data.friendlyCreatedAt = friendlyDate(res.data.createdAt)
-        this.notebooks.unshift(res.data)
-        this.$message({
-          type: 'success',
-          message: res.msg
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '取消输入'
-        })
+        this.addNotebook({title: value})
+        //return Notebooks.addNoteBook({title: value})
       })
     },
     onEdit(notebook) {
@@ -77,18 +74,8 @@ export default {
         inputErrorMessage: '标题不能为空，且不能超过30个字符'
       }).then(({value}) => {
         title = value
-        return Notebooks.updateNoteBook(notebook.id, {title: value})
-      }).then(res => {
-        notebook.title = title
-        this.$message({
-          type: 'success',
-          message: res.msg
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '取消输入'
-        })
+        this.updateNotebook({notebookId: notebook.id, title: title})
+        //return Notebooks.updateNoteBook(notebook.id, {title: value})
       })
     },
     onDelete(notebook) {
@@ -97,18 +84,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        return Notebooks.deleteNoteBook(notebook.id)
-      }).then(() => {
-        this.notebooks.splice(this.notebooks.indexOf(notebook), 1)
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
+        this.deleteNotebook({notebookId: notebook.id})
       })
     }
   }

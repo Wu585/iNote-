@@ -33,6 +33,7 @@
 
 <script>
 import Auth from "@/apis/auth";
+import {mapActions} from 'vuex'
 
 Auth.getInfo()
     .then(data => {
@@ -59,6 +60,10 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      loginUser: 'login',
+      registerUser: 'register'
+    }),
     showLogin() {
       this.isShowLogin = true
       this.isShowRegister = false
@@ -81,10 +86,7 @@ export default {
       this.register.isError = false
       this.register.notice = ''
       console.log(`start register..., username: ${this.register.username} , password: ${this.register.password}`)
-      Auth.register({username: this.register.username, password: this.register.password})
-          .then(data => {
-            console.log(data);
-          })
+      this.registerUser({username: this.register.username, password: this.register.password})
     },
     onLogin() {
       if (!/^[\w\u4e00-\u9fa5]{3,15}$/.test(this.login.username)) {
@@ -101,11 +103,10 @@ export default {
       this.login.notice = ''
 
       console.log(`start login..., username: ${this.login.username} , password: ${this.login.password}`)
-      Auth.login({
+      this.loginUser({
         username: this.login.username,
         password: this.login.password
-      }).then(data => {
-        console.log(data);
+      }).then(() => {
         this.$router.push('/notebooks')
       })
     }
