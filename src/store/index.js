@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import Notebook from '@/apis/notebooks'
 import Note from '@/apis/note'
 import Auth from '@/apis/auth'
+import Trash from '@/apis/trash'
 
 Vue.use(Vuex)
 
@@ -11,9 +12,10 @@ export default new Vuex.Store({
         notebooks: [],
         curBookId: null,
         notes: [],
-        curNote: {},
         curNoteId: null,
-        user: null
+        user: null,
+        trashNotes: [],
+        curTrashNoteId: null
     },
     getters: {
         notebooks: state => state.notebooks || [],
@@ -23,10 +25,16 @@ export default new Vuex.Store({
         },
         notes: state => state.notes,
         curNote: state => {
+            if (!state.curNoteId) return state.notes[0] || {}
             return state.notes.find(note => note.id == state.curNoteId) || {}
         },
         username: state => state.user === null ? '未登录' : state.user.username,
-        slug: state => state.user === null ? '未' : state.user.username[0]
+        slug: state => state.user === null ? '未' : state.user.username[0],
+        trashNotes: state => state.trashNotes || [],
+        curTrashNote: state => {
+            return state.trashNotes.find(note => note.id == state.curTrashNoteId) || {}
+        },
+
     },
     mutations: {
         setNotebooks(state, payload) {
@@ -61,12 +69,25 @@ export default new Vuex.Store({
         deleteNote(state, payload) {
             state.notes = state.notes.filter(note => note.id != payload.noteId)
         },
-        setCurNote(state, payload) {
+        setCurNote(state, payload={}) {
             state.curNoteId = payload.curNoteId
         },
 
         setUser(state, payload) {
             state.user = payload.user
+        },
+
+        setTrashNotes(state, payload) {
+            state.trashNotes = payload.trashNotes
+        },
+        addTrashNote(state, payload) {
+            state.trashNotes.unshift(payload.note)
+        },
+        deleteTrashNote(state, payload) {
+            state.trashNotes = state.trashNotes.filter(note => note.id != payload.noteId)
+        },
+        setCurTrashNote(state, payload) {
+            state.curTrashNoteId = payload.curTrashNoteId
         }
     },
     actions: {
@@ -141,6 +162,25 @@ export default new Vuex.Store({
                     } else {
                         commit('setUser', {user: res.data})
                     }
+                })
+        },
+
+        getTrashNotes({commit}) {
+            return Trash.getAll()
+                .then(res => {
+                    commit('setTrashNotes', {trashNotes: res.data})
+                })
+        },
+        deleteTrashNote({commit}, {noteId}) {
+            return Trash.deleteNote(noteId)
+                .then(() => {
+                    commit('deleteTrashNote', {noteId})
+                })
+        },
+        revertTrashNote({commit}, {noteId}) {
+            return Trash.revertNote(noteId)
+                .then(() => {
+                    commit('deleteTrashNote', {noteId})
                 })
         }
     },

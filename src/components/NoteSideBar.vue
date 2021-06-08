@@ -34,11 +34,17 @@ export default {
   created() {
     this.getNotebooks()
         .then(() => {
-          console.log(this.notebooks[0].id);
-          this.setCurBook({curBookId: this.$route.query.notebookId}||{curBookId:this.notebooks[0].id})
+          this.setCurBook({curBookId: this.$route.query.notebookId} || {curBookId: this.notebooks[0].id})
           return this.getNotes({notebookId: this.curBook.id})
         }).then(() => {
       this.setCurNote({curNoteId: this.$route.query.noteId})
+      // this.$router.replace({
+      //   path: '/note',
+      //   query: {
+      //     noteId: this.curNote.id,
+      //     notebookId: this.curBook.id
+      //   }
+      // })
     })
 
     // Notebooks.getAll()
@@ -63,7 +69,8 @@ export default {
     ...mapGetters([
       'notebooks',
       'notes',
-      'curBook'
+      'curBook',
+      'curNote'
     ])
   },
   methods: {
@@ -80,9 +87,15 @@ export default {
       if (notebookId === 'trash') {
         return this.$router.push({path: '/trash'})
       }
-      console.log(notebookId);
       this.$store.commit('setCurBook', {curBookId: notebookId})
       this.getNotes({notebookId})
+      this.setCurNote({})
+      this.$router.replace({
+        path: '/note',
+        query: {
+          notebookId: this.curBook.id
+        }
+      })
     },
     onAddNote() {
       this.addNote({notebookId: this.curBook.id})

@@ -4,9 +4,13 @@ import Login from "@/components/Login";
 import NotebookList from '@/components/NotebookList'
 import NoteDetail from '@/components/NoteDetail'
 import TrashDetail from '@/components/TrashDetail'
-//import Frank from '@/components/Frank'
 
 Vue.use(VueRouter)
+
+const originalReplace = VueRouter.prototype.replace
+VueRouter.prototype.replace = function replace(location) {
+    return originalReplace.call(this, location).catch(err => err)
+}
 
 const routes = [
     {
@@ -34,5 +38,6 @@ const routes = [
 const router = new VueRouter({
     routes
 })
+
 
 export default router
