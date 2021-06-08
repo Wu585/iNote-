@@ -4,6 +4,7 @@ import Notebook from '@/apis/notebooks'
 import Note from '@/apis/note'
 import Auth from '@/apis/auth'
 import Trash from '@/apis/trash'
+import {Message} from "element-ui";
 
 Vue.use(Vuex)
 
@@ -69,7 +70,7 @@ export default new Vuex.Store({
         deleteNote(state, payload) {
             state.notes = state.notes.filter(note => note.id != payload.noteId)
         },
-        setCurNote(state, payload={}) {
+        setCurNote(state, payload = {}) {
             state.curNoteId = payload.curNoteId
         },
 
@@ -150,8 +151,8 @@ export default new Vuex.Store({
         register({commit}, {username, password}) {
             return Auth.register({username, password})
                 .then(res => {
-                    console.log(res);
                     commit('setUser', {user: res.data})
+                    Message.success(res.msg)
                 })
         },
         checkLogin({commit}) {

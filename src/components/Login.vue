@@ -3,7 +3,9 @@
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
-          <div class="main"></div>
+          <div class="main">
+            <img src="../../public/img/inote.png" alt="">
+          </div>
           <div class="form">
             <h3 @click="showRegister">创建账户</h3>
             <transition name="slide">
@@ -145,15 +147,19 @@ export default {
   display: flex;
 
   .main {
+    display: flex;
     flex: 1;
-    background: #36bc64 url(//cloud.hunger-valley.com/17-12-13/38476998.jpg-middle) center center no-repeat;
+    background: #f1f1f1 center center no-repeat;
     background-size: contain;
+    align-items: center;
+    justify-content: center;
   }
 
   .form {
     width: 270px;
     border-left: 1px solid #ccc;
     overflow: hidden;
+    background-color: #f1f1f1;
 
     h3 {
       padding: 10px 20px;
