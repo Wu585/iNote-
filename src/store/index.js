@@ -30,7 +30,7 @@ export default new Vuex.Store({
     },
     mutations: {
         setNotebooks(state, payload) {
-            state.notebooks = payload.notebooks
+            state.notebooks = payload.notebooks.reverse()
         },
         addNotebook(state, payload) {
             state.notebooks.unshift(payload.notebook)
@@ -48,7 +48,7 @@ export default new Vuex.Store({
 
 
         setNote(state, payload) {
-            state.notes = payload.notes
+            state.notes = payload.notes.reverse()
         },
         addNote(state, payload) {
             state.notes.unshift(payload.note)
