@@ -3,7 +3,7 @@
     <NoteSideBar @update:notes="val=>notes=val"/>
     <div class="note-detail">
       <div class="note-empty" v-show="!curNote.id">
-        请选择笔记
+        暂未添加笔记
       </div>
       <div class="note-detail-ct" v-show="curNote.id">
         <div class="note-bar">
