@@ -23,8 +23,12 @@ export default function request(url, type = 'GET', data = {}) {
             if (res.status === 200) {
                 resolve(res.data)
             } else {
-                Message.error(res.data.msg)
-                reject(res.data)
+                if (res.data.msg === '缺少 notebookId 参数或者 notebookId 无效') {
+                    console.log(res.data.msg);
+                } else {
+                    Message.error(res.data.msg)
+                    reject(res.data)
+                }
             }
         }).catch(() => {
             reject({msg: '网络异常'})

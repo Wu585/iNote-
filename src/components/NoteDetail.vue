@@ -2,8 +2,11 @@
   <div id="note" class="detail">
     <NoteSideBar @update:notes="val=>notes=val"/>
     <div class="note-detail">
+      <div class="note-empty" v-show="!curBook.id">
+        请先添加笔记本后
+      </div>
       <div class="note-empty" v-show="!curNote.id">
-        暂未添加笔记
+        选择或创建笔记
       </div>
       <div class="note-detail-ct" v-show="curNote.id">
         <div class="note-bar">
@@ -61,7 +64,8 @@ export default {
   computed: {
     ...mapGetters([
       'notes',
-      'curNote'
+      'curNote',
+      'curBook'
     ]),
     previewContent() {
       return md.render(this.curNote.content || '')

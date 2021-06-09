@@ -1,11 +1,12 @@
 <template>
   <div class="note-sidebar">
-    <span class="btn add-note" @click="onAddNote">添加笔记</span>
-    <el-dropdown class="notebook-title" @command="handleCommand" placement="bottom">
+    <span v-if="curBook.id" class="btn add-note" @click="onAddNote">添加笔记</span>
+    <span v-if="!curBook.id" class="notebook-title">无笔记本</span>
+    <el-dropdown v-if="curBook.id" class="notebook-title" @command="handleCommand" placement="bottom">
        <span class="el-dropdown-link">
     {{ curBook.title }}<i class="iconfont icon-down"></i>
   </span>
-      <el-dropdown-menu slot="dropdown">
+      <el-dropdown-menu  slot="dropdown">
         <el-dropdown-item v-for="notebook in notebooks" :key="notebook.id" :command="notebook.id">
           {{ notebook.title }}
         </el-dropdown-item>

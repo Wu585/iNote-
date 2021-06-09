@@ -40,6 +40,7 @@ export default {
     //     .then(res => {
     //       this.notebooks = res.data.reverse()
     //     })
+
     this.$store.dispatch('getNotebooks')
   },
   computed: {
