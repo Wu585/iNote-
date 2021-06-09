@@ -66,7 +66,6 @@ export default {
       })
     },
     onEdit(notebook) {
-      let title = ''
       this.$prompt('请输入新笔记本标题', '修改笔记本', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -74,8 +73,7 @@ export default {
         inputValue: notebook.title,
         inputErrorMessage: '标题不能为空，且不能超过30个字符'
       }).then(({value}) => {
-        title = value
-        this.updateNotebook({notebookId: notebook.id, title: title})
+        this.updateNotebook({notebookId: notebook.id, title: value})
         //return Notebooks.updateNoteBook(notebook.id, {title: value})
       })
     },

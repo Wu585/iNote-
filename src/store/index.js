@@ -107,7 +107,8 @@ export default new Vuex.Store({
         updateNotebook({commit}, payload) {
             return Notebook.updateNoteBook(payload.notebookId, {title: payload.title})
                 .then(res => {
-                    commit('updateNotebook', {notebookId: res.notebookId, title: res.title})
+                    console.log(res);
+                    commit('updateNotebook', {notebookId: payload.notebookId, title: payload.title})
                 })
         },
         deleteNotebook({commit}, payload) {
